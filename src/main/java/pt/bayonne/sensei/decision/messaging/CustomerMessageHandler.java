@@ -19,10 +19,12 @@ public class CustomerMessageHandler {
 
     @Bean
     public Consumer<CustomerEvent.CustomerCreated> handleCustomerCreated(){
-        return customerCreated -> {
-            log.info("consuming the event: {}",customerCreated);
-            CustomerDTO customer = customerCreated.customer();
-            decisionMakerService.decide(customer.ssn(), customer.birthDate());
-        };
+        return this::handle;
+    }
+
+    private void handle(CustomerEvent.CustomerCreated customerCreated) {
+        log.info("consuming the event: {}", customerCreated);
+        CustomerDTO customer = customerCreated.customer();
+        decisionMakerService.decide(customer.ssn(), customer.birthDate());
     }
 }
