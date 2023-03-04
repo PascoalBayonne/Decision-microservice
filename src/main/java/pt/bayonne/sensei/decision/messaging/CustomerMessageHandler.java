@@ -19,17 +19,6 @@ public class CustomerMessageHandler {
 
     private final DecisionMakerService decisionMakerService;
 
-//    @Bean
-//    public Consumer<CustomerEvent.CustomerCreated> handleCustomerCreated(){
-//        return this::handle;
-//    }
-
-    private void handle(CustomerEvent.CustomerCreated customerCreated) {
-        log.info("consuming the event: {}", customerCreated);
-        CustomerDTO customer = customerCreated.customer();
-        decisionMakerService.decide(customer.ssn(), customer.birthDate());
-    }
-
     @Bean
     public Function<CustomerEvent.CustomerCreated, Decision> processCustomerCreated(){
         return customerCreated -> {
