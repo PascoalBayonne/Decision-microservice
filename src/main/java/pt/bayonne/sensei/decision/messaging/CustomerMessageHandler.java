@@ -9,7 +9,6 @@ import pt.bayonne.sensei.decision.messaging.event.CustomerDTO;
 import pt.bayonne.sensei.decision.messaging.event.CustomerEvent;
 import pt.bayonne.sensei.decision.service.DecisionMakerService;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 @Component
@@ -20,10 +19,14 @@ public class CustomerMessageHandler {
     private final DecisionMakerService decisionMakerService;
 
     @Bean
-    public Function<CustomerEvent.CustomerCreated, Decision> processCustomerCreated(){
+    public Function<CustomerEvent.CustomerCreated, Decision> processCustomerCreated() {
         return customerCreated -> {
             log.info("processing (transforming) the customerCreated: {}", customerCreated);
             CustomerDTO customer = customerCreated.customer();
+            //consuming an API which gives timeout
+            if (customer.firstName().startsWith("N")) {
+                throw new IllegalStateException("the customer is invalid");
+            }
             Decision decision = decisionMakerService.decide(customer.ssn(), customer.birthDate());
             log.info("producing the decision: {}", decision);
             return decision;
