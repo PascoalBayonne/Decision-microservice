@@ -20,17 +20,15 @@ public class CustomerMessageHandler {
 
     @Bean
     public Function<CustomerEvent.CustomerCreated, Decision> processCustomerCreated() {
-        return customerCreated -> {
-            log.info("processing (transforming) the customerCreated: {}", customerCreated);
-            CustomerDTO customer = customerCreated.customer();
-            //consuming an API which gives timeout
-            if (customer.firstName().startsWith("N")) {
-                throw new IllegalStateException("the customer is invalid");
-            }
-            Decision decision = decisionMakerService.decide(customer.ssn(), customer.birthDate());
-            log.info("producing the decision: {}", decision);
-            return decision;
-        };
+        return this::handle;
+    }
+
+    private Decision handle(CustomerEvent.CustomerCreated customerCreated) {
+        log.info("processing (transforming) the customerCreated: {}", customerCreated);
+        CustomerDTO customer = customerCreated.customer();
+        Decision decision = decisionMakerService.decide(customer.ssn(), customer.birthDate());
+        log.info("producing the decision: {}", decision);
+        return decision;
     }
 
 }
