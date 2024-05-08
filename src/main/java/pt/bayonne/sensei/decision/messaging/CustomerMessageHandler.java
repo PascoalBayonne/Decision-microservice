@@ -9,7 +9,8 @@ import pt.bayonne.sensei.decision.messaging.event.CustomerDTO;
 import pt.bayonne.sensei.decision.messaging.event.CustomerEvent;
 import pt.bayonne.sensei.decision.service.DecisionMakerService;
 
-import java.util.function.Function;
+import java.util.List;
+import java.util.function.Consumer;
 
 @Component
 @Slf4j
@@ -18,9 +19,12 @@ public class CustomerMessageHandler {
 
     private final DecisionMakerService decisionMakerService;
 
+
     @Bean
-    public Function<CustomerEvent.CustomerCreated, Decision> processCustomerCreated() {
-        return this::handle;
+    public Consumer<List<CustomerEvent.CustomerCreated>> processCustomerCreated() {
+        return customersCreated -> {
+            customersCreated.forEach(this::handle);
+        };
     }
 
     private Decision handle(CustomerEvent.CustomerCreated customerCreated) {
