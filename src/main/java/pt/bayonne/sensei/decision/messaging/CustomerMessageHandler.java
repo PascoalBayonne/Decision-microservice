@@ -22,17 +22,14 @@ public class CustomerMessageHandler {
 
     @Bean
     public Consumer<List<CustomerEvent.CustomerCreated>> processCustomerCreated() {
-        return customersCreated -> {
-            customersCreated.forEach(this::handle);
-        };
+        return customersCreated -> customersCreated.forEach(this::handle);
     }
 
-    private Decision handle(CustomerEvent.CustomerCreated customerCreated) {
+    private void handle(CustomerEvent.CustomerCreated customerCreated) {
         log.info("processing (transforming) the customerCreated: {}", customerCreated);
         CustomerDTO customer = customerCreated.customer();
         Decision decision = decisionMakerService.decide(customer.ssn(), customer.birthDate());
-        log.info("producing the decision: {}", decision);
-        return decision;
+        log.info("the decision result is: {}", decision);
     }
 
 }

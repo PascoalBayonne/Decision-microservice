@@ -21,7 +21,7 @@ import java.util.Optional;
         ids = "pt.bayonne.sensei:customer:+:stubs"
 )
 @Slf4j
-public class HandleCustomerCreatedEventIT {
+class HandleCustomerCreatedEventIT {
 
     @Autowired
     private StubFinder stubFinder;
