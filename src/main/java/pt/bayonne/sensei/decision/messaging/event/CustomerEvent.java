@@ -17,4 +17,15 @@ public sealed interface CustomerEvent extends Serializable {
 
     }
 
+    /**
+     * DTO to be used on Event-Driven Notification Event.
+     * @param customerId
+     * @param createdAt
+     * @param eventType
+     * @param source
+     */
+    record CustomerCreatedEvent(Long customerId, Instant createdAt, String eventType, String source) implements CustomerEvent {
+
+    }
+
 }
